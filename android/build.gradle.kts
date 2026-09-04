@@ -16,24 +16,24 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 subprojects {
-    val configureNamespace: (Project) -> Unit = { proj ->
-        if (proj.plugins.hasPlugin("com.android.application") || proj.plugins.hasPlugin("com.android.library")) {
-            proj.extensions.findByType<com.android.build.gradle.BaseExtension>()?.apply {
-                if (namespace.isNullOrEmpty()) {
-                    namespace = when (proj.name) {
-                        "on_audio_query_android" -> "com.lucasjosino.on_audio_query"
-                        else -> proj.group.toString().takeIf { it.isNotBlank() && it != "unspecified" }
-                            ?: "com.example.${proj.name.replace('-', '_').replace('.', '_')}"
-                    }
+    plugins.withId("com.android.library") {
+        extensions.findByType<com.android.build.gradle.BaseExtension>()?.apply {
+            if (namespace.isNullOrBlank()) {
+                namespace = when (project.name) {
+                    "on_audio_query_android" -> "com.lucasjosino.on_audio_query"
+                    else -> project.group.toString().takeIf { it.isNotBlank() && it != "unspecified" }
+                        ?: "com.example.${project.name.replace('-', '_').replace('.', '_')}"
                 }
             }
         }
     }
-
-    if (project.state.executed) {
-        configureNamespace(project)
-    } else {
-        project.afterEvaluate { configureNamespace(this) }
+    plugins.withId("com.android.application") {
+        extensions.findByType<com.android.build.gradle.BaseExtension>()?.apply {
+            if (namespace.isNullOrBlank()) {
+                namespace = project.group.toString().takeIf { it.isNotBlank() && it != "unspecified" }
+                    ?: "com.example.${project.name.replace('-', '_').replace('.', '_')}"
+            }
+        }
     }
 }
 
