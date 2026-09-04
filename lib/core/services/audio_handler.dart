@@ -1,14 +1,30 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:media_player/core/services/storage_service.dart';
 
 class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   final _player = AudioPlayer();
+  final _storage = StorageService();
 
   MyAudioHandler() {
     _player.playbackEventStream.listen(_broadcastState);
-    _player.currentIndexStream.listen((index) {
-      if (index != null && queue.value.isNotEmpty) {
-        mediaItem.add(queue.value[index]);
+    _player.currentIndexStream.listen((index) async {
+      if (index != null && queue.value.isNotEmpty && index < queue.value.length) {
+        final current = queue.value[index];
+        mediaItem.add(current);
+        // Resume from saved position if any
+        final savedMs = await _storage.getPlaybackPosition(current.id);
+        if (savedMs > 3000 && _player.position.inMilliseconds < 1000) {
+          _player.seek(Duration(milliseconds: savedMs));
+        }
+      }
+    });
+
+    // Periodically save playback position
+    _player.positionStream.listen((pos) {
+      final current = mediaItem.value;
+      if (current != null && pos.inMilliseconds > 2000) {
+        _storage.savePlaybackPosition(current.id, pos.inMilliseconds);
       }
     });
   }
@@ -46,7 +62,13 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   Future<void> play() => _player.play();
 
   @override
-  Future<void> pause() => _player.pause();
+  Future<void> pause() async {
+    final current = mediaItem.value;
+    if (current != null) {
+      await _storage.savePlaybackPosition(current.id, _player.position.inMilliseconds);
+    }
+    await _player.pause();
+  }
 
   @override
   Future<void> seek(Duration position) => _player.seek(position);
@@ -59,15 +81,35 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> stop() async {
+    final current = mediaItem.value;
+    if (current != null) {
+      await _storage.savePlaybackPosition(current.id, _player.position.inMilliseconds);
+    }
     await _player.stop();
     mediaItem.add(null);
   }
 
   Future<void> setPlaylist(List<MediaItem> items, int index) async {
     final playlist = ConcatenatingAudioSource(
-      children: items.map((item) => AudioSource.uri(Uri.file(item.id), tag: item)).toList(),
+      children: items.map((item) {
+        final uri = item.id.startsWith('http://') || item.id.startsWith('https://')
+            ? Uri.parse(item.id)
+            : Uri.file(item.id);
+        return AudioSource.uri(uri, tag: item);
+      }).toList(),
     );
     queue.add(items);
     await _player.setAudioSource(playlist, initialIndex: index);
+    
+    // Check saved position for initial track
+    if (index < items.length) {
+      final savedMs = await _storage.getPlaybackPosition(items[index].id);
+      if (savedMs > 3000) {
+        await _player.seek(Duration(milliseconds: savedMs));
+      }
+    }
+    _player.play();
   }
 }
+
+

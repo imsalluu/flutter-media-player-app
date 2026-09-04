@@ -96,14 +96,15 @@ class MusicListScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF121212),
+        backgroundColor: const Color(0xFF131520),
         title: const Text('Sort By', style: TextStyle(color: Colors.white)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SortOption(label: 'Date Added', option: SortOption.date),
-            _SortOption(label: 'Name', option: SortOption.name),
-            _SortOption(label: 'Size', option: SortOption.size),
+            _SortOption(label: 'Date Added', option: SortField.dateAdded),
+            _SortOption(label: 'Name', option: SortField.name),
+            _SortOption(label: 'Size', option: SortField.size),
+            _SortOption(label: 'Duration', option: SortField.duration),
           ],
         ),
       ),
@@ -113,20 +114,22 @@ class MusicListScreen extends ConsumerWidget {
 
 class _SortOption extends ConsumerWidget {
   final String label;
-  final SortOption option;
+  final SortField option;
   const _SortOption({required this.label, required this.option});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentSort = ref.watch(sortOptionProvider);
+    final currentFilter = ref.watch(mediaFilterProvider);
     return ListTile(
       title: Text(label, style: const TextStyle(color: Colors.white)),
-      leading: Radio<SortOption>(
+      leading: Radio<SortField>(
         value: option,
-        groupValue: currentSort,
-        activeColor: const Color(0xFFFF003A),
+        groupValue: currentFilter.sortField,
+        activeColor: const Color(0xFF6366F1),
         onChanged: (val) {
-          ref.read(sortOptionProvider.notifier).state = val!;
+          if (val != null) {
+            ref.read(mediaFilterProvider.notifier).setSortField(val);
+          }
           Navigator.pop(context);
         },
       ),

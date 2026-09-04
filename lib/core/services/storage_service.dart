@@ -39,6 +39,23 @@ class StorageService {
     return prefs.getStringList(_recentKey) ?? [];
   }
 
+  static const String _playbackPositionsKey = 'playback_positions_';
+
+  Future<void> savePlaybackPosition(String mediaId, int positionMs) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('$_playbackPositionsKey$mediaId', positionMs);
+  }
+
+  Future<int> getPlaybackPosition(String mediaId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('$_playbackPositionsKey$mediaId') ?? 0;
+  }
+
+  Future<void> clearPlaybackPosition(String mediaId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('$_playbackPositionsKey$mediaId');
+  }
+
   static const String _themeKey = 'theme_mode';
 
   Future<void> saveThemeMode(String mode) async {
@@ -51,3 +68,4 @@ class StorageService {
     return prefs.getString(_themeKey) ?? 'system';
   }
 }
+
