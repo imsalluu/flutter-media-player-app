@@ -148,7 +148,7 @@ class SettingsScreen extends ConsumerWidget {
                 icon: FontAwesomeIcons.circleInfo,
                 gradient: AppTheme.amberCoralGradient,
                 title: 'App Version',
-                subtitle: 'v$version (Cyber Aurora Pro)',
+                subtitle: 'v$version (EchoPlay Pro)',
               );
             },
           ),
