@@ -594,7 +594,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Lead Architect • Next-Gen Audio Engine',
+                          'Senior Flutter Developer',
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,

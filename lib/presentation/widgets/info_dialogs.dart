@@ -37,10 +37,10 @@ class InfoDialogs {
           ],
         ),
         content: Text(
-          'To add the Cyber Aurora Media Player widget to your device home screen:\n\n'
+          'To add the EchoPlay widget to your device home screen:\n\n'
           '1. Long-press on any empty space on your home screen.\n'
           '2. Tap "Widgets".\n'
-          '3. Locate "Media Player" and drag the widget to your desired position.',
+          '3. Locate "EchoPlay" and drag the widget to your desired position.',
           style: GoogleFonts.plusJakartaSans(fontSize: 13, height: 1.6, color: Colors.white70),
         ),
         actions: [

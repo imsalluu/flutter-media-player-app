@@ -1,8 +1,8 @@
-# ⚡ Cyber Aurora Media Player
+# ⚡ EchoPlay
 
 A state-of-the-art, ultra-premium offline media player built with **Flutter**. Engineered with an **Electric Indigo & Neon Cyan Cyber Aurora** aesthetic, **Google Fonts typography**, and **FontAwesome Icons**, it delivers an unmatched audio and video experience for mobile, web, and desktop.
 
-> **Crafted with passion • Made by Salman**
+> **Crafted with passion • Made by Salman (Senior Flutter Developer)**
 
 ---
 
@@ -140,7 +140,7 @@ The app requests appropriate media permissions to discover and decode files safe
 
 ## 👨‍💻 Developer & Credits
 
-Designed and developed by **Salman** (`imsalluu`).
+Designed and developed by **Salman** (`imsalluu`) • *Senior Flutter Developer*.
 
 ---
 

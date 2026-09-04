@@ -137,7 +137,7 @@ class SettingsScreen extends ConsumerWidget {
             icon: FontAwesomeIcons.userAstronaut,
             gradient: AppTheme.primaryGradient,
             title: 'Made by Salman',
-            subtitle: 'Lead Developer • Media Experience',
+            subtitle: 'Senior Flutter Developer',
             onTap: () {},
           ),
           FutureBuilder<PackageInfo>(

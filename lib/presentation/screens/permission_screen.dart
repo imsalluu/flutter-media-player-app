@@ -68,7 +68,7 @@ class PermissionScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
 
                 Text(
-                  'Allow Media Player to discover and play high-res audio tracks, albums, folders, and HD video collections on your device.',
+                  'Allow EchoPlay to discover and play high-res audio tracks, albums, folders, and HD video collections on your device.',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 13.5,
